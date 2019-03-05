@@ -4,6 +4,6 @@ ADD requirements.txt requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-ADD producer.py /producer.py
+ADD consumer.py /consumer.py
 
-CMD ["python" "./producer.py"]
+CMD ["python" "./consumer.py"]
