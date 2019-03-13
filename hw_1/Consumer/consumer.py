@@ -1,17 +1,21 @@
-#!/usr/bin/env python3
 import pika
 import sys
+import time
+	
+pika_url = pika.ConnectionParameters('rabbit', 5672)
 
-def callback(ch, method, properties, data):
-    print(data)
-
-try:
-    connection = pika.BlockingConnection(pika.URLParameters("amqp://guest:guest@localhost:32769"))
+def callback(ch, method, properties, body):
+  print(body.decode(), file=sys.stdout, flush=True)    
+		
+while True:
+  try:
+    connection = pika.BlockingConnection(pika_url)
     channel = connection.channel()
-    channel.queue_declare(queue='rand_num')
-
-    while True:
-        chanel.basic_consume(callback, queue='hello', no_ack=True)
-        
-except Exception:
-    print('Something goes wrong', file=sys.stderr)
+    channel.queue_declare(queue='num')
+    
+    channel.basic_consume('num', callback )             
+    channel.start_consuming()
+  
+  except Exception as e:
+    print(str(e), file=sys.stderr, flush=True)
+    time.sleep(1)
