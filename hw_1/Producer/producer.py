@@ -1,19 +1,21 @@
-#!/usr/bin/env python3
 import pika
-import sys
-
 import random
+import sys
 import time
 
-try:
-    connection = pika.BlockingConnection(pika.URLParameters("amqp://guest:guest@localhost:32769"))
-    channel = connection.channel()
-    channel.queue_declare(queue='rand_num')
+pika_url = pika.ConnectionParameters('rabbit', 5672)
+
+while True:
+  try:
+    connection = pika.BlockingConnection(pika_url)
+    channel = connection.channel() 
+    channel.queue_declare(queue='num')
 
     while True:
-        data = random.randrange(-sys.maxsize-1, sys.maxsize)
-        channel.basic_publish(exchange='', routing_key='rand_num', body=str(data))
-        time.sleep(3)
-
-except Exception:
-    print('Something goes wrong', file=sys.stderr)
+      data = str(random.randint(1, 1000000)) 
+      channel.basic_publish(exchange='', routing_key='num', body=data.encode())
+      time.sleep(1)
+  
+  except Exception as e:
+    print(str(e), file=sys.stderr, flush=True)
+    time.sleep(1)
