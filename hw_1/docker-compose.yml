@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  consumer:
+    build: Consumer
+    links: 
+      - rabbit
+
+  producer:
+    build: Producer
+    links:
+      - rabbit
+  rabbit:
+    image: 'rabbitmq:3-management'
+    command: rabbitmq-server
+    ports:
+      - '5672:5672'
+      - '15672:15672'
