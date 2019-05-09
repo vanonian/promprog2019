@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Questions</title>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+
+    <ul>
+      {% for question in question_list %}
+        <li><a href="{% url 'detail' question.id %}">{{ question.topic }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <a href="{% url 'create' %}">Create a question</a>
+  </body>
+</html>

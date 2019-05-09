@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create a question</title>
+    <meta charset="utf-8">
+  </head>
+
+  <body>
+    <form method="POST" action="{% url 'create' %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Save a question">
+    </form>
+  </body>
+</html>
